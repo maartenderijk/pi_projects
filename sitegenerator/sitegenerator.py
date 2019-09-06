@@ -37,4 +37,5 @@ class SiteGenerator(object):
 
 if __name__ == "__main__":
     s = SiteGenerator()
+    s.output_file = "./render/index.html"
     s.render()
