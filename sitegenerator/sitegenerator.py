@@ -42,7 +42,7 @@ class SiteGenerator(object):
         template_tag = (template_name[2:-2].strip()).split("_")[0]
         template_files = [f for f in listdir(self.template_folder) if path.isfile(
             path.join(self.template_folder, f)) and f.startswith(template_tag)]
-        template_files.sort()
+        template_files.sort(reverse=True)
 
         template_content = ""
 
