@@ -1,8 +1,6 @@
 import re
 from os import path, listdir
 
-# TODO: Check Regex
-# TODO: Remove strip() functions
 class SiteGenerator(object):
     ''' 
     Simple template based site generator.
@@ -17,15 +15,14 @@ class SiteGenerator(object):
         self.replacements = replacements
 
     def render(self):
-        re_pattern_templates = "[{][{]\s*(\S*)\s*[}][}]"
+        re_pattern_templates = r"([{][{]\s*\S*\s*[}][}])"
 
         with open(self.output_file, "w") as writer:
             with open(path.join(self.template_folder, self.base_template)) as base_reader:
                 for line in base_reader:
-
-                    templates = re.search(re_pattern_templates, line)
-                    if templates:
-                        for template_name in templates.groups():
+                    templates_matches = re.findall(re_pattern_templates, line)
+                    if templates_matches:
+                        for template_name in templates_matches:
                             template_content = self.read_templates(
                                 template_name)
                             writer.write(template_content)
@@ -33,10 +30,10 @@ class SiteGenerator(object):
                     else:
                         writer.write(line)
 
-        # self.replace()
+        self.replace()
 
     def read_templates(self, template_name):
-        template_tag = template_name.strip()
+        template_tag = (template_name[2:-2].strip()).split("_")[0]
         template_files = [f for f in listdir(self.template_folder) if path.isfile(
             path.join(self.template_folder, f)) and f.startswith(template_tag)]
         template_content = ""
@@ -50,20 +47,23 @@ class SiteGenerator(object):
         return template_content
 
     def replace(self):
-        re_pattern_replacements = "[{][%]\s*(\S*)\s*[%][}]"
+        re_pattern_replacements = r"([{][%]\s*\S*\s*[%][}])"
 
-        with open(self.output_file, 'r') as file:
-            filedata = file.read()
+        with open(self.output_file, 'r') as template_file:
+            template_data = template_file.read()
 
-        replacements_matches = re.findall(re_pattern_replacements, filedata)
-        for r in replacements_matches:
-            print(self.replacements.get(r))
+        replacements_matches = re.findall(
+            re_pattern_replacements, template_data)
+        for replacement_tag in replacements_matches:
+            r = (replacement_tag[2:-2]).strip()
+            new_text = self.replacements.get(r)
 
-            filedata = filedata.replace(r, 'abcd')
+            if new_text:
+                template_data = template_data.replace(
+                    replacement_tag, new_text)
 
-        # # Write the file out again
-        # with open('file.txt', 'w') as file:
-        #     file.write(filedata)
+        with open(self.output_file, 'w') as template_file:
+            template_file.write(template_data)
 
 
 if __name__ == "__main__":
