@@ -1,5 +1,5 @@
 ''' Automatic site update based on sensor data of raspberry pi with SENSE-hat'''
-
+from sense_hat import SenseHat
 from sitegenerator.sitegenerator import SiteGenerator
 from datetime import datetime
 
