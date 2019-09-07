@@ -1,6 +1,7 @@
 import re
 from os import path, listdir
 
+
 class SiteGenerator(object):
     ''' 
     Simple template based site generator.
@@ -30,12 +31,19 @@ class SiteGenerator(object):
                     else:
                         writer.write(line)
 
-        self.replace()
+        self.replace_tags()
 
     def read_templates(self, template_name):
+        """ 
+        Returns content of all the templates with the same template tag.
+        The template tag is defined as the text in the filename before the first underscore.
+        The alfa-numerical order after the first underscore is used as render order.
+        """
         template_tag = (template_name[2:-2].strip()).split("_")[0]
         template_files = [f for f in listdir(self.template_folder) if path.isfile(
             path.join(self.template_folder, f)) and f.startswith(template_tag)]
+        template_files.sort()
+
         template_content = ""
 
         if len(template_files) == 0:
@@ -46,7 +54,12 @@ class SiteGenerator(object):
                 template_content += template_reader.read()
         return template_content
 
-    def replace(self):
+    def replace_tags(self):
+        """ 
+        Replaces all the {% variable %} tags in the output file with values from the replacement dictionary.
+        If no match if found in the dictionary the tag will not be replaced.
+        """
+
         re_pattern_replacements = r"([{][%]\s*\S*\s*[%][}])"
 
         with open(self.output_file, 'r') as template_file:
