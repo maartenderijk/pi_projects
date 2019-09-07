@@ -33,7 +33,7 @@ snapshot_page.base_template = "base_snapshot.html"
 snapshot_page.output_file = "./templates/snapshot_" + datestr + ".html"
 snapshot_page.replacements = {
     "datetime": now.strftime(r"%Y-%m-%d %H:%M:%S"),
-    "temperature": str(calib_temp) + " C",
+    "temperature": str(calib_temp) + "",
     "img_url": img_url.replace("/docs","")
 }
 snapshot_page.render()
