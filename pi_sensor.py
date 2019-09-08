@@ -19,7 +19,7 @@ camera.stop_preview()
 
 # Get Pi sensor data
 sense = SenseHat()
-factor = 1.4
+factor = 2.4
 cpu_value = subprocess.check_output("vcgencmd measure_temp", shell=True)
 cpu_temp = float(cpu_value.split("=")[1].split("'")[0])
 sense_temp = sense.get_temperature()
@@ -27,12 +27,16 @@ calib_temp = round(sense_temp - ((cpu_temp - sense_temp) / factor), 1)
 
 
 # Generate template for sensor data
+weekdays = ("Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag")
+today = weekdays[datetime.today().weekday()]
 now = datetime.now()
+
 snapshot_page = SiteGenerator()
 snapshot_page.base_template = "base_snapshot.html"
 snapshot_page.output_file = "./templates/snapshot_" + datestr + ".html"
 snapshot_page.replacements = {
-    "datetime": now.strftime(r"%Y-%m-%d %H:%M:%S"),
+    "date": today.capitalize() + " " + now.strftime(r"%d-%m-%Y"),
+    "time": now.strftime(r"%H:%M:%S"),
     "temperature": str(calib_temp) + "",
     "img_url": img_url.replace("/docs","")
 }
