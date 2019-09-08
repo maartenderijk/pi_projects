@@ -19,7 +19,7 @@ camera.stop_preview()
 
 # Get Pi sensor data
 sense = SenseHat()
-factor = 2.4
+factor = 1.4
 cpu_value = subprocess.check_output("vcgencmd measure_temp", shell=True)
 cpu_temp = float(cpu_value.split("=")[1].split("'")[0])
 sense_temp = sense.get_temperature()
