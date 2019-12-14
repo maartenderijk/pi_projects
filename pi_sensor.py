@@ -5,6 +5,7 @@ from sense_hat import SenseHat
 from sitegenerator.sitegenerator import SiteGenerator
 from datetime import datetime
 import subprocess
+import json
 
 # Get Pi Photo data
 now = datetime.now()
@@ -41,6 +42,24 @@ snapshot_page.replacements = {
     "img_url": img_url.replace("/docs","")
 }
 snapshot_page.render()
+
+# Update jsonstring
+json_file = "./docs/snapshots.json"
+add_object = {
+    "Datestring": (today.capitalize() + " " + now.strftime(r"%d-%m-%Y")), 
+    "Image": img_url.replace("./docs","https://maartenderijk.github.io/sitegenerator"), 
+    "Timestring": now.strftime(r"%H:%M:%S"), 
+    "Temperature": calib_temp
+}
+
+with open(json_file) as f:
+    data = json.load(f)
+
+data.append(add_object)
+
+with open(json_file, 'w') as f:
+    json.dump(data, f)
+
 
 # Update main template with new templates
 indexpage = SiteGenerator(output_file="./docs/index.html")
