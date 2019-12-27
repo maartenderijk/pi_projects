@@ -2,7 +2,6 @@
 from picamera import PiCamera
 from time import sleep
 from sense_hat import SenseHat
-from sitegenerator.sitegenerator import SiteGenerator
 from datetime import datetime
 import subprocess
 import json
@@ -27,23 +26,10 @@ sense_temp = sense.get_temperature()
 calib_temp = round(sense_temp - ((cpu_temp - sense_temp) / factor), 1)
 
 
-# Generate template for sensor data
+# Update jsonstring
 weekdays = ("Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag")
 today = weekdays[datetime.today().weekday()]
 now = datetime.now()
-
-snapshot_page = SiteGenerator()
-snapshot_page.base_template = "base_snapshot.html"
-snapshot_page.output_file = "./templates/snapshot_" + datestr + ".html"
-snapshot_page.replacements = {
-    "date": today.capitalize() + " " + now.strftime(r"%d-%m-%Y"),
-    "time": now.strftime(r"%H:%M:%S"),
-    "temperature": str(calib_temp) + "",
-    "img_url": img_url.replace("/docs","")
-}
-snapshot_page.render()
-
-# Update jsonstring
 json_file = "./docs/snapshots.json"
 add_object = {
     "Datestring": (today.capitalize() + " " + now.strftime(r"%d-%m-%Y")), 
@@ -60,7 +46,3 @@ data.append(add_object)
 with open(json_file, 'w') as f:
     json.dump(data, f)
 
-
-# Update main template with new templates
-indexpage = SiteGenerator(output_file="./docs/index.html")
-indexpage.render()
