@@ -33,10 +33,11 @@ now = datetime.now()
 json_file = "./docs/snapshots.json"
 add_object = {
     "Datestring": (today.capitalize() + " " + now.strftime(r"%d-%m-%Y")), 
-    "Image": img_url.replace("./docs","https://maartenderijk.github.io/sitegenerator"), 
+    "Image": img_url.replace("./docs","https://maartenderijk.github.io/pi_projects"), 
     "Timestring": now.strftime(r"%H:%M:%S"), 
     "Temperature": calib_temp
 }
+
 
 with open(json_file) as f:
     data = json.load(f)
