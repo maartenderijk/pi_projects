@@ -27,7 +27,7 @@ calib_temp = round(sense_temp - ((cpu_temp - sense_temp) / factor), 1)
 
 
 # Update jsonstring
-weekdays = ("Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag")
+weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 today = weekdays[datetime.today().weekday()]
 now = datetime.now()
 json_file = "./docs/snapshots.json"
