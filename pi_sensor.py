@@ -27,16 +27,17 @@ calib_temp = round(sense_temp - ((cpu_temp - sense_temp) / factor), 1)
 
 
 # Update jsonstring
-weekdays = ("Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag")
+weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 today = weekdays[datetime.today().weekday()]
 now = datetime.now()
 json_file = "./docs/snapshots.json"
 add_object = {
     "Datestring": (today.capitalize() + " " + now.strftime(r"%d-%m-%Y")), 
-    "Image": img_url.replace("./docs","https://maartenderijk.github.io/sitegenerator"), 
+    "Image": img_url.replace("./docs","https://maartenderijk.github.io/pi_projects"), 
     "Timestring": now.strftime(r"%H:%M:%S"), 
     "Temperature": calib_temp
 }
+
 
 with open(json_file) as f:
     data = json.load(f)
