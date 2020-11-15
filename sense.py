@@ -3,9 +3,6 @@ from sense_hat import SenseHat
 from time import sleep
 from random import choice
 
-
-
-
 # CREATE a sense object
 sense = SenseHat()
 
